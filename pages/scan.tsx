@@ -1,29 +1,37 @@
-import { auth } from "@/lib/firebase";
-import { getTodayScanCount, logScan } from "@/lib/firestore";
-import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { auth } from "../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firestore";
+import { useRouter } from "next/router";
 
-useEffect(() => {
-  const checkScanLimit = async () => {
-    const user = auth.currentUser;
-    if (!user) return;
+export default function ScanPage() {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-    const token = await user.getIdTokenResult();
-    const role = token.claims.role || "starter";
+  useEffect(() => {
+    const checkSubscription = async () => {
+      const user = auth.currentUser;
+      if (!user) return router.push("/login");
 
-    const count = await getTodayScanCount(user.uid);
-    const limits: Record<string, number | null> = {
-      starter: 5,
-      pro: 50,
-      enterprise: null,
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists() || docSnap.data().subscriptionStatus !== "active") {
+        alert("Please subscribe to access scanning.");
+        router.push("/pricing");
+      } else {
+        setLoading(false);
+      }
     };
 
-    const limit = limits[role];
+    checkSubscription();
+  }, []);
 
-    if (limit !== null && count >= limit) {
-      alert("You’ve hit your daily scan limit. Upgrade your plan for more scans.");
-      router.push("/pricing");
-    }
-  };
+  if (loading) return <div>Loading...</div>;
 
-  onAuthStateChanged(auth, () => checkScanLimit());
-}, []);
+  return (
+    <div className="p-6">
+      {/* Scan UI here */}
+    </div>
+  );
+}
