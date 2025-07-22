@@ -1,20 +1,29 @@
-import useUserRole from "@/hooks/useUserRole";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { auth } from "@/lib/firebase";
+import { getTodayScanCount, logScan } from "@/lib/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
-export default function ScanPage() {
-  const { role, loading } = useUserRole();
-  const router = useRouter();
+useEffect(() => {
+  const checkScanLimit = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
 
-  useEffect(() => {
-    if (!loading && !role) {
+    const token = await user.getIdTokenResult();
+    const role = token.claims.role || "starter";
+
+    const count = await getTodayScanCount(user.uid);
+    const limits: Record<string, number | null> = {
+      starter: 5,
+      pro: 50,
+      enterprise: null,
+    };
+
+    const limit = limits[role];
+
+    if (limit !== null && count >= limit) {
+      alert("You’ve hit your daily scan limit. Upgrade your plan for more scans.");
       router.push("/pricing");
     }
-  }, [loading, role, router]);
+  };
 
-  if (loading || !role) {
-    return <div className="p-4">Checking access...</div>;
-  }
-
-  // ... Your scan page content here
-}
+  onAuthStateChanged(auth, () => checkScanLimit());
+}, []);
