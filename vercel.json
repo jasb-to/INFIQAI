@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "app/api/webhook/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/analyze/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/detect-pii/route.ts": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    }
+  ]
+}
