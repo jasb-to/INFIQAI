@@ -3,12 +3,12 @@ import { Footer } from "@/components/footer"
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="container mx-auto px-4 py-16 max-w-4xl">
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         <div className="prose prose-gray dark:prose-invert max-w-none">
-          <h1 className="text-4xl font-bold mb-8">Terms and Conditions</h1>
-          <p className="text-lg text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString("en-GB")}</p>
+          <h1 className="text-3xl font-bold mb-8">Terms and Conditions</h1>
+          <p className="text-sm text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString()}</p>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
@@ -26,15 +26,15 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">2. Description of Service</h2>
             <p>
-              INFIQAI provides an AI-powered platform that analyzes documents to detect, identify, and help manage
-              Personally Identifiable Information (PII) and other sensitive data. Our service includes:
+              INFIQAI provides an AI-powered platform that analyzes documents for personally identifiable information
+              (PII), compliance risks, and data protection concerns. Our Service includes:
             </p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Document upload and analysis</li>
+              <li>Document upload and analysis capabilities</li>
               <li>PII detection and classification</li>
               <li>Compliance reporting and recommendations</li>
-              <li>Data redaction and anonymization tools</li>
-              <li>Analytics and audit trails</li>
+              <li>Data protection insights and analytics</li>
+              <li>User dashboard and management tools</li>
             </ul>
           </section>
 
@@ -42,79 +42,83 @@ export default function TermsPage() {
             <h2 className="text-2xl font-semibold mb-4">3. User Accounts</h2>
             <p>To access certain features of the Service, you must register for an account. You agree to:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Provide accurate, current, and complete information</li>
+              <li>Provide accurate, current, and complete information during registration</li>
               <li>Maintain and update your account information</li>
-              <li>Keep your password secure and confidential</li>
+              <li>Maintain the security of your password and account</li>
               <li>Accept responsibility for all activities under your account</li>
-              <li>Notify us immediately of any unauthorized use</li>
+              <li>Notify us immediately of any unauthorized use of your account</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">4. Acceptable Use</h2>
+            <h2 className="text-2xl font-semibold mb-4">4. Acceptable Use Policy</h2>
             <p>You agree not to use the Service to:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Upload illegal, harmful, or malicious content</li>
+              <li>Upload or analyze documents containing illegal content</li>
               <li>Violate any applicable laws or regulations</li>
-              <li>Infringe on intellectual property rights</li>
-              <li>Attempt to gain unauthorized access to our systems</li>
-              <li>Interfere with or disrupt the Service</li>
-              <li>Use the Service for competitive analysis or reverse engineering</li>
+              <li>Infringe upon the rights of others</li>
+              <li>Transmit malicious code or attempt to gain unauthorized access</li>
+              <li>Use the Service for any unlawful or prohibited purpose</li>
+              <li>Reverse engineer or attempt to extract our algorithms</li>
             </ul>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">5. Data Processing and Privacy</h2>
             <p>
-              We process your data in accordance with our Privacy Policy and applicable data protection laws, including
-              GDPR. By using our Service, you consent to such processing and warrant that all data provided is accurate.
+              Your privacy is important to us. Our processing of your personal data is governed by our Privacy Policy,
+              which forms part of these Terms. By using our Service, you consent to:
             </p>
-            <p>
-              You retain ownership of your documents and data. We process this data solely to provide our services and
-              will not use it for any other purpose without your explicit consent.
-            </p>
+            <ul className="list-disc pl-6 mb-4">
+              <li>The collection and processing of your data as described in our Privacy Policy</li>
+              <li>The analysis of documents you upload for PII detection purposes</li>
+              <li>The storage of analysis results and metadata</li>
+              <li>The use of aggregated, anonymized data for service improvement</li>
+            </ul>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">6. Subscription Plans and Billing</h2>
-            <p>Our Service offers several subscription plans:</p>
+            <p>INFIQAI offers multiple subscription tiers:</p>
             <ul className="list-disc pl-6 mb-4">
               <li>
-                <strong>Free Plan:</strong> £0 - 3 document scans, basic features
+                <strong>Starter Plan:</strong> £19/month - Up to 100 document scans
               </li>
               <li>
-                <strong>Starter Plan:</strong> £19/month - 100 scans, advanced features
+                <strong>Professional Plan:</strong> £49/month - Up to 500 document scans
               </li>
               <li>
-                <strong>Pro Plan:</strong> £49/month - 500 scans, premium features
-              </li>
-              <li>
-                <strong>Enterprise Plan:</strong> £149/month - Unlimited scans, enterprise features
+                <strong>Enterprise Plan:</strong> £149/month - Unlimited scans with advanced features
               </li>
             </ul>
-            <p>
-              Subscription fees are billed monthly in advance. You may cancel your subscription at any time, but no
-              refunds will be provided for partial months.
-            </p>
+            <p>Billing terms:</p>
+            <ul className="list-disc pl-6 mb-4">
+              <li>Subscriptions are billed monthly in advance</li>
+              <li>All fees are non-refundable except as required by law</li>
+              <li>We may change pricing with 30 days' notice</li>
+              <li>Accounts may be suspended for non-payment</li>
+            </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">7. Intellectual Property</h2>
+            <h2 className="text-2xl font-semibold mb-4">7. Intellectual Property Rights</h2>
             <p>
-              The Service and its original content, features, and functionality are owned by INFIQAI and are protected
-              by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+              The Service and its original content, features, and functionality are owned by INFIQAI Limited and are
+              protected by international copyright, trademark, patent, trade secret, and other intellectual property
+              laws.
             </p>
             <p>
-              You retain all rights to your uploaded documents and data. By uploading content, you grant us a limited
-              license to process and analyze it solely for providing our services.
+              You retain ownership of documents you upload, but grant us a limited license to process them for service
+              delivery.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">8. Limitation of Liability</h2>
             <p>
-              To the maximum extent permitted by law, INFIQAI shall not be liable for any indirect, incidental, special,
-              consequential, or punitive damages, including loss of profits, data, or other intangible losses.
+              To the maximum extent permitted by law, INFIQAI Limited shall not be liable for any indirect, incidental,
+              special, consequential, or punitive damages, including loss of profits, data, use, goodwill, or other
+              intangible losses.
             </p>
             <p>
               Our total liability shall not exceed the amount paid by you for the Service in the 12 months preceding the
@@ -123,10 +127,10 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">9. Service Availability</h2>
+            <h2 className="text-2xl font-semibold mb-4">9. Disclaimer of Warranties</h2>
             <p>
-              We strive to maintain high service availability but do not guarantee uninterrupted access. We may suspend
-              or terminate the Service for maintenance, updates, or other operational reasons.
+              The Service is provided "as is" and "as available" without warranties of any kind. We do not warrant that
+              the Service will be uninterrupted, secure, or error-free.
             </p>
           </section>
 
@@ -136,17 +140,14 @@ export default function TermsPage() {
               We may terminate or suspend your account and access to the Service immediately, without prior notice, for
               conduct that we believe violates these Terms or is harmful to other users, us, or third parties.
             </p>
-            <p>
-              Upon termination, your right to use the Service will cease immediately, and we may delete your account and
-              data.
-            </p>
+            <p>You may terminate your account at any time by contacting us or through your account settings.</p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">11. Changes to Terms</h2>
             <p>
-              We reserve the right to modify these Terms at any time. We will notify users of significant changes via
-              email or through the Service. Continued use after changes constitutes acceptance of the new Terms.
+              We reserve the right to modify these Terms at any time. We will notify users of material changes via email
+              or through the Service. Continued use after changes constitutes acceptance of the new Terms.
             </p>
           </section>
 
@@ -160,8 +161,8 @@ export default function TermsPage() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">13. Contact Information</h2>
-            <p>If you have any questions about these Terms, please contact us at:</p>
-            <div className="bg-muted p-4 rounded-lg">
+            <p>If you have any questions about these Terms, please contact us:</p>
+            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
               <p>
                 <strong>INFIQAI Limited</strong>
               </p>

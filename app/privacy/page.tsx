@@ -3,12 +3,12 @@ import { Footer } from "@/components/footer"
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="container mx-auto px-4 py-16 max-w-4xl">
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         <div className="prose prose-gray dark:prose-invert max-w-none">
-          <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
-          <p className="text-lg text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString("en-GB")}</p>
+          <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
+          <p className="text-sm text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString()}</p>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
@@ -17,63 +17,76 @@ export default function PrivacyPage() {
               explains how we collect, use, disclose, and safeguard your information when you use our AI-powered
               document analysis service.
             </p>
-            <p>This policy applies to our website (infiqai.com) and all related services, features, and content.</p>
+            <p>
+              This policy applies to all users of our service located at infiqai.com and complies with the UK General
+              Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
+            </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">2. Information We Collect</h2>
-
-            <h3 className="text-xl font-semibold mb-3">2.1 Personal Information</h3>
-            <p>We collect information you provide directly to us, including:</p>
+            <h3 className="text-xl font-semibold mb-2">Personal Information</h3>
             <ul className="list-disc pl-6 mb-4">
-              <li>Name and email address (for account registration)</li>
+              <li>Name and email address (for account creation)</li>
               <li>Billing information (processed securely through Stripe)</li>
-              <li>Profile information and preferences</li>
-              <li>Communications with our support team</li>
+              <li>Company information (if applicable)</li>
+              <li>Communication preferences</li>
             </ul>
 
-            <h3 className="text-xl font-semibold mb-3">2.2 Document Data</h3>
-            <p>When you use our service, we process:</p>
+            <h3 className="text-xl font-semibold mb-2">Document Data</h3>
             <ul className="list-disc pl-6 mb-4">
               <li>Documents you upload for analysis</li>
-              <li>Extracted text and metadata from documents</li>
-              <li>Analysis results and PII detection data</li>
-              <li>Usage patterns and service interactions</li>
+              <li>Analysis results and PII detection outcomes</li>
+              <li>Metadata about document processing</li>
+              <li>Usage statistics and analytics</li>
             </ul>
 
-            <h3 className="text-xl font-semibold mb-3">2.3 Technical Information</h3>
-            <p>We automatically collect certain technical information:</p>
+            <h3 className="text-xl font-semibold mb-2">Technical Information</h3>
             <ul className="list-disc pl-6 mb-4">
-              <li>IP address and device information</li>
-              <li>Browser type and version</li>
-              <li>Usage data and analytics</li>
-              <li>Cookies and similar tracking technologies</li>
+              <li>IP address and browser information</li>
+              <li>Device and operating system details</li>
+              <li>Usage patterns and feature interactions</li>
+              <li>Error logs and performance data</li>
             </ul>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">3. How We Use Your Information</h2>
-            <p>We use your information to:</p>
+            <p>We process your personal data for the following purposes:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Provide and maintain our document analysis services</li>
-              <li>Process your documents and detect PII</li>
-              <li>Manage your account and subscriptions</li>
-              <li>Send service-related communications</li>
-              <li>Improve our services and develop new features</li>
-              <li>Ensure security and prevent fraud</li>
-              <li>Comply with legal obligations</li>
+              <li>
+                <strong>Service Delivery:</strong> To provide document analysis and PII detection services
+              </li>
+              <li>
+                <strong>Account Management:</strong> To create and maintain your user account
+              </li>
+              <li>
+                <strong>Billing:</strong> To process payments and manage subscriptions
+              </li>
+              <li>
+                <strong>Communication:</strong> To send service updates and support responses
+              </li>
+              <li>
+                <strong>Improvement:</strong> To enhance our AI models and service quality
+              </li>
+              <li>
+                <strong>Compliance:</strong> To meet legal and regulatory requirements
+              </li>
+              <li>
+                <strong>Security:</strong> To protect against fraud and unauthorized access
+              </li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">4. Legal Basis for Processing (GDPR)</h2>
-            <p>Under GDPR, we process your personal data based on:</p>
+            <h2 className="text-2xl font-semibold mb-4">4. Legal Basis for Processing</h2>
+            <p>Under UK GDPR, we process your data based on:</p>
             <ul className="list-disc pl-6 mb-4">
               <li>
-                <strong>Contract:</strong> To provide our services as agreed
+                <strong>Contract:</strong> To fulfill our service agreement with you
               </li>
               <li>
-                <strong>Legitimate Interest:</strong> To improve our services and ensure security
+                <strong>Legitimate Interest:</strong> For service improvement and security
               </li>
               <li>
                 <strong>Consent:</strong> For marketing communications (where applicable)
@@ -86,127 +99,121 @@ export default function PrivacyPage() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">5. Data Sharing and Disclosure</h2>
-            <p>We do not sell your personal information. We may share your information with:</p>
-
-            <h3 className="text-xl font-semibold mb-3">5.1 Service Providers</h3>
+            <p>We may share your information with:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Firebase (Google) - Authentication and database services</li>
-              <li>Stripe - Payment processing</li>
-              <li>Vercel - Hosting and deployment</li>
-              <li>OpenAI - AI processing services</li>
+              <li>
+                <strong>Service Providers:</strong> Stripe for payment processing, cloud hosting providers
+              </li>
+              <li>
+                <strong>AI Partners:</strong> OpenAI for document analysis (with appropriate safeguards)
+              </li>
+              <li>
+                <strong>Legal Requirements:</strong> When required by law or to protect our rights
+              </li>
+              <li>
+                <strong>Business Transfers:</strong> In case of merger, acquisition, or sale
+              </li>
             </ul>
-
-            <h3 className="text-xl font-semibold mb-3">5.2 Legal Requirements</h3>
-            <p>We may disclose information when required by law or to:</p>
-            <ul className="list-disc pl-6 mb-4">
-              <li>Comply with legal processes</li>
-              <li>Protect our rights and property</li>
-              <li>Ensure user safety</li>
-              <li>Investigate potential violations</li>
-            </ul>
+            <p>We never sell your personal data to third parties for marketing purposes.</p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">6. Data Security</h2>
-            <p>We implement appropriate security measures to protect your information:</p>
+            <p>We implement appropriate technical and organizational measures to protect your data:</p>
             <ul className="list-disc pl-6 mb-4">
               <li>Encryption in transit and at rest</li>
-              <li>Regular security assessments</li>
+              <li>Regular security assessments and updates</li>
               <li>Access controls and authentication</li>
               <li>Secure data centers and infrastructure</li>
               <li>Employee training on data protection</li>
             </ul>
-            <p>
-              However, no method of transmission over the internet is 100% secure. We cannot guarantee absolute security
-              but strive to use commercially acceptable means to protect your data.
-            </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">7. Data Retention</h2>
-            <p>We retain your information for as long as necessary to:</p>
+            <p>We retain your data for as long as necessary to:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Provide our services</li>
+              <li>Provide our services to you</li>
               <li>Comply with legal obligations</li>
-              <li>Resolve disputes</li>
-              <li>Enforce our agreements</li>
+              <li>Resolve disputes and enforce agreements</li>
             </ul>
             <p>
-              Document data is typically retained for 30 days after processing, unless you have a longer retention
-              period in your subscription plan. Account data is retained until you delete your account.
+              Account data is typically retained for 7 years after account closure for legal compliance. Document
+              analysis results are retained for 2 years unless you request earlier deletion.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">8. Your Rights (GDPR)</h2>
-            <p>Under GDPR, you have the right to:</p>
+            <h2 className="text-2xl font-semibold mb-4">8. Your Rights Under UK GDPR</h2>
+            <p>You have the following rights regarding your personal data:</p>
             <ul className="list-disc pl-6 mb-4">
               <li>
-                <strong>Access:</strong> Request copies of your personal data
+                <strong>Access:</strong> Request a copy of your personal data
               </li>
               <li>
-                <strong>Rectification:</strong> Correct inaccurate personal data
+                <strong>Rectification:</strong> Correct inaccurate or incomplete data
               </li>
               <li>
-                <strong>Erasure:</strong> Request deletion of your personal data
+                <strong>Erasure:</strong> Request deletion of your data ("right to be forgotten")
               </li>
               <li>
-                <strong>Restrict Processing:</strong> Limit how we use your data
+                <strong>Restriction:</strong> Limit how we process your data
               </li>
               <li>
-                <strong>Data Portability:</strong> Receive your data in a portable format
+                <strong>Portability:</strong> Receive your data in a structured format
               </li>
               <li>
-                <strong>Object:</strong> Object to processing based on legitimate interests
+                <strong>Objection:</strong> Object to processing based on legitimate interests
               </li>
               <li>
-                <strong>Withdraw Consent:</strong> Withdraw consent for processing
+                <strong>Withdraw Consent:</strong> Where processing is based on consent
               </li>
             </ul>
             <p>To exercise these rights, contact us at privacy@infiqai.com</p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">9. Cookies and Tracking</h2>
+            <h2 className="text-2xl font-semibold mb-4">9. International Data Transfers</h2>
+            <p>Your data may be processed in countries outside the UK. We ensure adequate protection through:</p>
+            <ul className="list-disc pl-6 mb-4">
+              <li>Standard Contractual Clauses approved by the UK authorities</li>
+              <li>Adequacy decisions for certain countries</li>
+              <li>Appropriate safeguards and security measures</li>
+            </ul>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">10. Cookies and Tracking</h2>
             <p>We use cookies and similar technologies to:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Maintain your session and preferences</li>
+              <li>Maintain your login session</li>
+              <li>Remember your preferences</li>
               <li>Analyze usage patterns</li>
-              <li>Improve our services</li>
-              <li>Provide personalized experiences</li>
+              <li>Improve service performance</li>
             </ul>
+            <p>You can control cookies through your browser settings.</p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">11. Children's Privacy</h2>
             <p>
-              You can control cookies through your browser settings. However, disabling cookies may affect the
-              functionality of our service.
+              Our service is not intended for children under 16. We do not knowingly collect personal information from
+              children under 16. If you believe we have collected such information, please contact us immediately.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">10. International Data Transfers</h2>
+            <h2 className="text-2xl font-semibold mb-4">12. Changes to This Policy</h2>
             <p>
-              Your information may be transferred to and processed in countries other than your own. We ensure
-              appropriate safeguards are in place, including:
+              We may update this Privacy Policy periodically. We will notify you of material changes via email or
+              through our service. The updated policy will be effective when posted.
             </p>
-            <ul className="list-disc pl-6 mb-4">
-              <li>Standard Contractual Clauses</li>
-              <li>Adequacy decisions by the European Commission</li>
-              <li>Certification schemes and codes of conduct</li>
-            </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">11. Changes to This Policy</h2>
-            <p>
-              We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new
-              policy on this page and updating the "Last updated" date.
-            </p>
-            <p>For significant changes, we will provide additional notice via email or through our service.</p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">12. Contact Us</h2>
-            <p>If you have any questions about this Privacy Policy or our data practices, please contact us:</p>
-            <div className="bg-muted p-4 rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4">13. Contact Information</h2>
+            <p>For questions about this Privacy Policy or to exercise your rights, contact:</p>
+            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mb-4">
               <p>
                 <strong>Data Protection Officer</strong>
               </p>
@@ -216,8 +223,11 @@ export default function PrivacyPage() {
               <p>Birmingham B1 1AA</p>
               <p>United Kingdom</p>
               <p>Email: privacy@infiqai.com</p>
-              <p>DPO Email: dpo@infiqai.com</p>
             </div>
+            <p>
+              You also have the right to lodge a complaint with the Information Commissioner's Office (ICO) if you
+              believe your data protection rights have been violated.
+            </p>
           </section>
         </div>
       </main>
