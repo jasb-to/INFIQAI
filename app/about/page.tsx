@@ -8,33 +8,6 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
 
-const teamMembers = [
-  {
-    name: "Sarah Johnson",
-    role: "CEO & Co-Founder",
-    bio: "Former VP of Data Privacy at a Fortune 500 company with 15+ years in compliance and AI.",
-    image: "/placeholder.svg?height=300&width=300&text=Sarah+Johnson",
-  },
-  {
-    name: "Dr. Michael Chen",
-    role: "CTO & Co-Founder",
-    bio: "PhD in Machine Learning from Oxford. Previously led AI research teams at Google and Microsoft.",
-    image: "/placeholder.svg?height=300&width=300&text=Dr.+Michael+Chen",
-  },
-  {
-    name: "Emma Rodriguez",
-    role: "Head of Product",
-    bio: "Product leader with 10+ years building enterprise SaaS solutions for compliance and security.",
-    image: "/placeholder.svg?height=300&width=300&text=Emma+Rodriguez",
-  },
-  {
-    name: "James Wilson",
-    role: "Head of Engineering",
-    bio: "Full-stack architect with expertise in scalable AI systems and data processing pipelines.",
-    image: "/placeholder.svg?height=300&width=300&text=James+Wilson",
-  },
-]
-
 const milestones = [
   {
     year: "2023",
@@ -272,38 +245,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Team Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our diverse team of experts brings together decades of experience in AI, privacy, compliance, and
-                enterprise software development.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member, index) => (
-                <Card key={index} className="text-center">
-                  <CardContent className="pt-6">
-                    <img
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.name}
-                      className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-                    />
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
-                    <p className="text-blue-600 font-medium mb-3">{member.role}</p>
-                    <p className="text-sm text-gray-600">{member.bio}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Company Timeline */}
-        <section className="py-20">
+        <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>

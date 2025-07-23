@@ -138,10 +138,12 @@ export function DashboardSidebar() {
 
       {/* Help Section */}
       <div className="border-t p-2">
-        <Button variant="ghost" className={cn("w-full justify-start", collapsed && "px-2")}>
-          <HelpCircle className={cn("h-4 w-4", !collapsed && "mr-2")} />
-          {!collapsed && <span>Help & Support</span>}
-        </Button>
+        <Link href="/contact">
+          <Button variant="ghost" className={cn("w-full justify-start", collapsed && "px-2")}>
+            <HelpCircle className={cn("h-4 w-4", !collapsed && "mr-2")} />
+            {!collapsed && <span>Help & Support</span>}
+          </Button>
+        </Link>
       </div>
     </div>
   )

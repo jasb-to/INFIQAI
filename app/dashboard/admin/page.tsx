@@ -1,35 +1,49 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { DashboardSidebar } from "@/components/dashboard/sidebar"
+import { DashboardHeader } from "@/components/dashboard/header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Progress } from "@/components/ui/progress"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Users,
   FileText,
   Shield,
   DollarSign,
   Search,
+  Filter,
   Download,
-  AlertTriangle,
+  MoreHorizontal,
   Eye,
-  Ban,
   Mail,
-  Calendar,
-  Activity,
+  UserMinus,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  CreditCard,
 } from "lucide-react"
 
 // Mock data for admin dashboard
 const mockUsers = [
   {
-    id: "1",
+    id: "user_001",
     name: "John Smith",
-    email: "john.smith@company.com",
+    email: "john@company.com",
     plan: "Pro",
     status: "Active",
     scansUsed: 45,
@@ -38,203 +52,138 @@ const mockUsers = [
     lastActive: "2024-01-20",
   },
   {
-    id: "2",
+    id: "user_002",
     name: "Sarah Johnson",
-    email: "sarah.j@startup.io",
+    email: "sarah@startup.io",
     plan: "Enterprise",
     status: "Active",
-    scansUsed: 180,
+    scansUsed: 234,
     scansLimit: 500,
-    joinDate: "2023-12-01",
+    joinDate: "2024-01-10",
+    lastActive: "2024-01-20",
+  },
+  {
+    id: "user_003",
+    name: "Mike Chen",
+    email: "mike@techcorp.com",
+    plan: "Free",
+    status: "Active",
+    scansUsed: 8,
+    scansLimit: 10,
+    joinDate: "2024-01-18",
     lastActive: "2024-01-19",
   },
   {
-    id: "3",
-    name: "Mike Chen",
-    email: "mike.chen@tech.com",
-    plan: "Basic",
-    status: "Suspended",
-    scansUsed: 10,
-    scansLimit: 25,
-    joinDate: "2024-01-10",
-    lastActive: "2024-01-18",
-  },
-  {
-    id: "4",
-    name: "Emily Davis",
-    email: "emily@consulting.com",
+    id: "user_004",
+    name: "Emma Wilson",
+    email: "emma@consulting.com",
     plan: "Pro",
-    status: "Active",
-    scansUsed: 78,
+    status: "Suspended",
+    scansUsed: 67,
     scansLimit: 100,
-    joinDate: "2023-11-20",
-    lastActive: "2024-01-20",
+    joinDate: "2024-01-05",
+    lastActive: "2024-01-18",
   },
 ]
 
 const mockScans = [
   {
-    id: "scan_1",
-    documentName: "Financial Report Q4 2023.pdf",
-    user: "john.smith@company.com",
-    scanDate: "2024-01-20",
-    piiFound: 12,
-    complianceScore: 85,
-    status: "Completed",
-    riskLevel: "Medium",
-  },
-  {
-    id: "scan_2",
-    documentName: "Employee Handbook.docx",
-    user: "sarah.j@startup.io",
-    scanDate: "2024-01-19",
-    piiFound: 3,
-    complianceScore: 95,
-    status: "Completed",
-    riskLevel: "Low",
-  },
-  {
-    id: "scan_3",
-    documentName: "Client Database Export.xlsx",
-    user: "emily@consulting.com",
-    scanDate: "2024-01-19",
-    piiFound: 45,
-    complianceScore: 60,
-    status: "Completed",
+    id: "scan_001",
+    document: "Employee_Records_2024.pdf",
+    user: "John Smith",
+    piiCount: 47,
     riskLevel: "High",
+    complianceScore: 85,
+    scanDate: "2024-01-20",
+    status: "Complete",
   },
   {
-    id: "scan_4",
-    documentName: "Marketing Campaign Data.csv",
-    user: "mike.chen@tech.com",
-    scanDate: "2024-01-18",
-    piiFound: 8,
-    complianceScore: 78,
-    status: "Processing",
+    id: "scan_002",
+    document: "Customer_Database_Export.csv",
+    user: "Sarah Johnson",
+    piiCount: 234,
+    riskLevel: "Critical",
+    complianceScore: 45,
+    scanDate: "2024-01-20",
+    status: "Complete",
+  },
+  {
+    id: "scan_003",
+    document: "Marketing_Contacts.xlsx",
+    user: "Mike Chen",
+    piiCount: 89,
     riskLevel: "Medium",
+    complianceScore: 72,
+    scanDate: "2024-01-19",
+    status: "Processing",
   },
 ]
 
 const mockSubscriptions = [
   {
-    id: "sub_1",
-    user: "john.smith@company.com",
+    id: "sub_001",
+    user: "John Smith",
     plan: "Pro",
+    amount: 29,
     status: "Active",
-    amount: "$29/month",
     nextBilling: "2024-02-15",
     paymentMethod: "•••• 4242",
   },
   {
-    id: "sub_2",
-    user: "sarah.j@startup.io",
+    id: "sub_002",
+    user: "Sarah Johnson",
     plan: "Enterprise",
+    amount: 99,
     status: "Active",
-    amount: "$99/month",
-    nextBilling: "2024-02-01",
+    nextBilling: "2024-02-10",
     paymentMethod: "•••• 5555",
   },
   {
-    id: "sub_3",
-    user: "emily@consulting.com",
+    id: "sub_003",
+    user: "Emma Wilson",
     plan: "Pro",
-    status: "Active",
-    amount: "$29/month",
-    nextBilling: "2024-02-20",
+    amount: 29,
+    status: "Past Due",
+    nextBilling: "2024-01-18",
     paymentMethod: "•••• 1234",
-  },
-  {
-    id: "sub_4",
-    user: "mike.chen@tech.com",
-    plan: "Basic",
-    status: "Cancelled",
-    amount: "$9/month",
-    nextBilling: "N/A",
-    paymentMethod: "•••• 9876",
   },
 ]
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [activeTab, setActiveTab] = useState("users")
+  const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
 
   useEffect(() => {
-    const checkAdminAuth = () => {
-      try {
-        const storedUser = localStorage.getItem("infiqai_user")
-        if (storedUser) {
-          const userData = JSON.parse(storedUser)
-          if (userData.role !== "admin") {
-            // Not an admin, redirect to regular dashboard
-            router.push("/dashboard")
-            return
-          }
-          setUser(userData)
-        } else {
-          // No user found, redirect to login
-          router.push("/auth/login")
-          return
-        }
-      } catch (error) {
-        console.error("Admin auth check error:", error)
-        router.push("/auth/login")
+    const storedUser = localStorage.getItem("infiqai_user")
+    if (storedUser) {
+      const userData = JSON.parse(storedUser)
+      setUser(userData)
+
+      // Redirect non-admin users to regular dashboard
+      if (userData.role !== "admin") {
+        router.push("/dashboard")
         return
       }
-      setLoading(false)
+    } else {
+      router.push("/auth/login")
     }
-
-    checkAdminAuth()
   }, [router])
 
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
-          <p className="text-sm text-muted-foreground">Loading admin dashboard...</p>
-        </div>
-      </div>
-    )
+  if (!user || user.role !== "admin") {
+    return <div>Loading...</div>
   }
 
-  const filteredUsers = mockUsers.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.plan.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
-
-  const filteredScans = mockScans.filter(
-    (scan) =>
-      scan.documentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      scan.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      scan.status.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
-
-  const filteredSubscriptions = mockSubscriptions.filter(
-    (sub) =>
-      sub.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      sub.plan.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      sub.status.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
-
-  const getRiskBadge = (riskLevel: string) => {
-    switch (riskLevel) {
-      case "High":
-        return <Badge variant="destructive">High Risk</Badge>
-      case "Medium":
-        return <Badge variant="secondary">Medium Risk</Badge>
-      case "Low":
-        return (
-          <Badge variant="outline" className="text-green-600 border-green-600">
-            Low Risk
-          </Badge>
-        )
+  const getPlanBadge = (plan: string) => {
+    switch (plan) {
+      case "Enterprise":
+        return <Badge className="bg-purple-100 text-purple-800">Enterprise</Badge>
+      case "Pro":
+        return <Badge className="bg-blue-100 text-blue-800">Pro</Badge>
+      case "Free":
+        return <Badge variant="outline">Free</Badge>
       default:
-        return <Badge variant="outline">Unknown</Badge>
+        return <Badge variant="outline">{plan}</Badge>
     }
   }
 
@@ -242,325 +191,387 @@ export default function AdminDashboard() {
     switch (status) {
       case "Active":
         return (
-          <Badge variant="outline" className="text-green-600 border-green-600">
+          <Badge className="bg-green-100 text-green-800">
+            <CheckCircle className="h-3 w-3 mr-1" />
             Active
           </Badge>
         )
       case "Suspended":
-        return <Badge variant="destructive">Suspended</Badge>
-      case "Cancelled":
-        return <Badge variant="secondary">Cancelled</Badge>
-      case "Completed":
         return (
-          <Badge variant="outline" className="text-green-600 border-green-600">
-            Completed
+          <Badge variant="destructive">
+            <UserMinus className="h-3 w-3 mr-1" />
+            Suspended
+          </Badge>
+        )
+      case "Past Due":
+        return (
+          <Badge className="bg-orange-100 text-orange-800">
+            <AlertTriangle className="h-3 w-3 mr-1" />
+            Past Due
           </Badge>
         )
       case "Processing":
-        return <Badge variant="secondary">Processing</Badge>
+        return (
+          <Badge className="bg-blue-100 text-blue-800">
+            <Clock className="h-3 w-3 mr-1" />
+            Processing
+          </Badge>
+        )
+      case "Complete":
+        return (
+          <Badge className="bg-green-100 text-green-800">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            Complete
+          </Badge>
+        )
       default:
         return <Badge variant="outline">{status}</Badge>
     }
   }
 
+  const getRiskBadge = (risk: string) => {
+    switch (risk) {
+      case "Critical":
+        return <Badge variant="destructive">Critical</Badge>
+      case "High":
+        return <Badge className="bg-orange-100 text-orange-800">High</Badge>
+      case "Medium":
+        return <Badge className="bg-yellow-100 text-yellow-800">Medium</Badge>
+      case "Low":
+        return <Badge className="bg-green-100 text-green-800">Low</Badge>
+      default:
+        return <Badge variant="outline">{risk}</Badge>
+    }
+  }
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage users, monitor scans, and oversee platform operations</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Export Data
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1,234</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+12%</span> from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Document Scans</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8,456</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+23%</span> from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">PII Instances</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2,341</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-red-600">+5%</span> from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$45,231</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+18%</span> from last month
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Search Bar */}
-      <div className="flex items-center space-x-2">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search users, documents, or subscriptions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
-        </div>
-      </div>
-
-      {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="users">Users</TabsTrigger>
-          <TabsTrigger value="scans">Document Scans</TabsTrigger>
-          <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-        </TabsList>
-
-        {/* Users Tab */}
-        <TabsContent value="users" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Management</CardTitle>
-              <CardDescription>Manage user accounts, monitor usage, and handle subscriptions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>User</TableHead>
-                    <TableHead>Plan</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Usage</TableHead>
-                    <TableHead>Joined</TableHead>
-                    <TableHead>Last Active</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredUsers.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{user.name}</div>
-                          <div className="text-sm text-muted-foreground">{user.email}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{user.plan}</Badge>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(user.status)}</TableCell>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <div className="text-sm">
-                            {user.scansUsed}/{user.scansLimit} scans
-                          </div>
-                          <Progress value={(user.scansUsed / user.scansLimit) * 100} className="h-2" />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm">{user.joinDate}</TableCell>
-                      <TableCell className="text-sm">{user.lastActive}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Mail className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Ban className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Document Scans Tab */}
-        <TabsContent value="scans" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Document Scan Monitoring</CardTitle>
-              <CardDescription>Track document scans, PII detection, and compliance scores</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Document</TableHead>
-                    <TableHead>User</TableHead>
-                    <TableHead>Scan Date</TableHead>
-                    <TableHead>PII Found</TableHead>
-                    <TableHead>Compliance</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Risk Level</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredScans.map((scan) => (
-                    <TableRow key={scan.id}>
-                      <TableCell>
-                        <div className="font-medium">{scan.documentName}</div>
-                      </TableCell>
-                      <TableCell className="text-sm">{scan.user}</TableCell>
-                      <TableCell className="text-sm">{scan.scanDate}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className="h-4 w-4 text-amber-500" />
-                          <span className="font-medium">{scan.piiFound}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <div className="text-sm font-medium">{scan.complianceScore}%</div>
-                          <Progress value={scan.complianceScore} className="h-2" />
-                        </div>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(scan.status)}</TableCell>
-                      <TableCell>{getRiskBadge(scan.riskLevel)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Subscriptions Tab */}
-        <TabsContent value="subscriptions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Subscription Management</CardTitle>
-              <CardDescription>Monitor billing, plan changes, and payment status</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>User</TableHead>
-                    <TableHead>Plan</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Next Billing</TableHead>
-                    <TableHead>Payment Method</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredSubscriptions.map((sub) => (
-                    <TableRow key={sub.id}>
-                      <TableCell className="text-sm">{sub.user}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{sub.plan}</Badge>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(sub.status)}</TableCell>
-                      <TableCell className="font-medium">{sub.amount}</TableCell>
-                      <TableCell className="text-sm">{sub.nextBilling}</TableCell>
-                      <TableCell className="text-sm">{sub.paymentMethod}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Calendar className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
-            Recent Activity
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
-                <Users className="h-4 w-4 text-blue-600" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">New user registration</p>
-                <p className="text-xs text-muted-foreground">alice.cooper@newcompany.com joined with Pro plan</p>
-                <p className="text-xs text-muted-foreground">5 minutes ago</p>
-              </div>
+    <div className="flex min-h-screen bg-gray-50">
+      <DashboardSidebar />
+      <div className="flex-1 flex flex-col">
+        <DashboardHeader />
+        <main className="flex-1 p-6">
+          <div className="space-y-6">
+            {/* Header */}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+              <p className="text-gray-500 mt-2">Monitor and manage your INFIQAI platform</p>
             </div>
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100">
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">High-risk document detected</p>
-                <p className="text-xs text-muted-foreground">
-                  Document "Customer_Data_Export.xlsx" contains 67 PII instances
-                </p>
-                <p className="text-xs text-muted-foreground">12 minutes ago</p>
-              </div>
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{mockUsers.length}</div>
+                  <p className="text-xs text-muted-foreground">+12% from last month</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Document Scans</CardTitle>
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">1,234</div>
+                  <p className="text-xs text-muted-foreground">+19% from last month</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">PII Instances</CardTitle>
+                  <Shield className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">8,947</div>
+                  <p className="text-xs text-muted-foreground">Detected this month</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Revenue</CardTitle>
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">$45,231</div>
+                  <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                </CardContent>
+              </Card>
             </div>
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-                <DollarSign className="h-4 w-4 text-green-600" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">Payment received</p>
-                <p className="text-xs text-muted-foreground">Enterprise subscription renewal - $99.00</p>
-                <p className="text-xs text-muted-foreground">1 hour ago</p>
-              </div>
-            </div>
+
+            {/* Main Content Tabs */}
+            <Tabs defaultValue="users" className="space-y-6">
+              <TabsList>
+                <TabsTrigger value="users">Users</TabsTrigger>
+                <TabsTrigger value="scans">Document Scans</TabsTrigger>
+                <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="users" className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <Input
+                        placeholder="Search users..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 w-80"
+                      />
+                    </div>
+                    <Button variant="outline">
+                      <Filter className="h-4 w-4 mr-2" />
+                      Filter
+                    </Button>
+                  </div>
+                  <Button variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
+                    Export
+                  </Button>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>User Management</CardTitle>
+                    <CardDescription>Manage all registered users and their subscriptions</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>User</TableHead>
+                          <TableHead>Plan</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Usage</TableHead>
+                          <TableHead>Join Date</TableHead>
+                          <TableHead>Last Active</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockUsers.map((user) => (
+                          <TableRow key={user.id}>
+                            <TableCell>
+                              <div className="flex items-center space-x-3">
+                                <Avatar>
+                                  <AvatarImage src="/placeholder-user.jpg" />
+                                  <AvatarFallback>
+                                    {user.name
+                                      .split(" ")
+                                      .map((n) => n[0])
+                                      .join("")}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <div className="font-medium">{user.name}</div>
+                                  <div className="text-sm text-gray-500">{user.email}</div>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>{getPlanBadge(user.plan)}</TableCell>
+                            <TableCell>{getStatusBadge(user.status)}</TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span>
+                                    {user.scansUsed}/{user.scansLimit} scans
+                                  </span>
+                                </div>
+                                <Progress value={(user.scansUsed / user.scansLimit) * 100} className="h-2" />
+                              </div>
+                            </TableCell>
+                            <TableCell>{new Date(user.joinDate).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(user.lastActive).toLocaleDateString()}</TableCell>
+                            <TableCell className="text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem>
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    View Profile
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Mail className="h-4 w-4 mr-2" />
+                                    Send Email
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem className="text-red-600">
+                                    <UserMinus className="h-4 w-4 mr-2" />
+                                    Suspend User
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="scans" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Document Scans</CardTitle>
+                    <CardDescription>Monitor all document scans and PII detection results</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Document</TableHead>
+                          <TableHead>User</TableHead>
+                          <TableHead>PII Count</TableHead>
+                          <TableHead>Risk Level</TableHead>
+                          <TableHead>Compliance Score</TableHead>
+                          <TableHead>Scan Date</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockScans.map((scan) => (
+                          <TableRow key={scan.id}>
+                            <TableCell>
+                              <div className="flex items-center space-x-2">
+                                <FileText className="h-4 w-4 text-blue-600" />
+                                <span className="font-medium">{scan.document}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell>{scan.user}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center space-x-2">
+                                <span className="font-medium">{scan.piiCount}</span>
+                                {scan.piiCount > 100 && <AlertTriangle className="h-4 w-4 text-orange-500" />}
+                              </div>
+                            </TableCell>
+                            <TableCell>{getRiskBadge(scan.riskLevel)}</TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span>{scan.complianceScore}%</span>
+                                </div>
+                                <Progress value={scan.complianceScore} className="h-2" />
+                              </div>
+                            </TableCell>
+                            <TableCell>{new Date(scan.scanDate).toLocaleDateString()}</TableCell>
+                            <TableCell>{getStatusBadge(scan.status)}</TableCell>
+                            <TableCell className="text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem>
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    View Report
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Download className="h-4 w-4 mr-2" />
+                                    Download
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="subscriptions" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Subscriptions</CardTitle>
+                    <CardDescription>Monitor billing and subscription status for all users</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>User</TableHead>
+                          <TableHead>Plan</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Next Billing</TableHead>
+                          <TableHead>Payment Method</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockSubscriptions.map((subscription) => (
+                          <TableRow key={subscription.id}>
+                            <TableCell>
+                              <div className="flex items-center space-x-3">
+                                <Avatar className="h-8 w-8">
+                                  <AvatarImage src="/placeholder-user.jpg" />
+                                  <AvatarFallback className="text-xs">
+                                    {subscription.user
+                                      .split(" ")
+                                      .map((n) => n[0])
+                                      .join("")}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="font-medium">{subscription.user}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell>{getPlanBadge(subscription.plan)}</TableCell>
+                            <TableCell>${subscription.amount}/month</TableCell>
+                            <TableCell>{getStatusBadge(subscription.status)}</TableCell>
+                            <TableCell>{new Date(subscription.nextBilling).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center space-x-2">
+                                <CreditCard className="h-4 w-4 text-gray-400" />
+                                <span>{subscription.paymentMethod}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem>
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    View Details
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Download className="h-4 w-4 mr-2" />
+                                    Download Invoice
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
-        </CardContent>
-      </Card>
+        </main>
+      </div>
     </div>
   )
 }
