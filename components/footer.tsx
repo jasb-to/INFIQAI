@@ -17,14 +17,14 @@ export function Footer() {
             <h3 className="font-semibold">Product</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link href="/#features" className="text-muted-foreground hover:text-foreground">
+                <a href="/#features" className="text-muted-foreground hover:text-foreground">
                   Features
-                </Link>
+                </a>
               </li>
               <li>
-                <Link href="/#pricing" className="text-muted-foreground hover:text-foreground">
+                <a href="/#pricing" className="text-muted-foreground hover:text-foreground">
                   Pricing
-                </Link>
+                </a>
               </li>
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-foreground">
@@ -43,12 +43,12 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
-                  Privacy
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-muted-foreground hover:text-foreground">
-                  Terms
+                  Terms & Conditions
                 </Link>
               </li>
             </ul>
@@ -57,18 +57,8 @@ export function Footer() {
             <h3 className="font-semibold">Support</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link href="/help" className="text-muted-foreground hover:text-foreground">
-                  Help Center
-                </Link>
-              </li>
-              <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-foreground">
                   Contact Support
-                </Link>
-              </li>
-              <li>
-                <Link href="/status" className="text-muted-foreground hover:text-foreground">
-                  Status
                 </Link>
               </li>
             </ul>
