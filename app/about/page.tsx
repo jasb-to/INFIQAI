@@ -1,143 +1,180 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Zap, Users, Award, CheckCircle } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Shield, Zap, Users, Award, Target, Heart, Globe, Lightbulb } from "lucide-react"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 import Link from "next/link"
+
+const teamMembers = [
+  {
+    name: "Sarah Johnson",
+    role: "CEO & Co-Founder",
+    bio: "Former VP of Data Privacy at a Fortune 500 company with 15+ years in compliance and AI.",
+    image: "/placeholder.svg?height=300&width=300&text=Sarah+Johnson",
+  },
+  {
+    name: "Dr. Michael Chen",
+    role: "CTO & Co-Founder",
+    bio: "PhD in Machine Learning from Oxford. Previously led AI research teams at Google and Microsoft.",
+    image: "/placeholder.svg?height=300&width=300&text=Dr.+Michael+Chen",
+  },
+  {
+    name: "Emma Rodriguez",
+    role: "Head of Product",
+    bio: "Product leader with 10+ years building enterprise SaaS solutions for compliance and security.",
+    image: "/placeholder.svg?height=300&width=300&text=Emma+Rodriguez",
+  },
+  {
+    name: "James Wilson",
+    role: "Head of Engineering",
+    bio: "Full-stack architect with expertise in scalable AI systems and data processing pipelines.",
+    image: "/placeholder.svg?height=300&width=300&text=James+Wilson",
+  },
+]
+
+const milestones = [
+  {
+    year: "2023",
+    title: "Company Founded",
+    description: "INFIQAI was founded with a mission to democratize AI-powered compliance tools.",
+  },
+  {
+    year: "2023",
+    title: "First Product Launch",
+    description: "Launched our core PII detection and document analysis platform.",
+  },
+  {
+    year: "2024",
+    title: "Series A Funding",
+    description: "Raised £5M Series A to expand our AI capabilities and team.",
+  },
+  {
+    year: "2024",
+    title: "Enterprise Expansion",
+    description: "Launched enterprise features and gained 100+ business customers.",
+  },
+]
+
+const values = [
+  {
+    icon: Shield,
+    title: "Privacy First",
+    description: "We believe privacy is a fundamental right and build our products with privacy by design principles.",
+  },
+  {
+    icon: Zap,
+    title: "Innovation",
+    description: "We continuously push the boundaries of what's possible with AI and machine learning technologies.",
+  },
+  {
+    icon: Users,
+    title: "Customer Success",
+    description: "Our customers' success is our success. We're committed to delivering exceptional value and support.",
+  },
+  {
+    icon: Heart,
+    title: "Integrity",
+    description: "We operate with transparency, honesty, and ethical practices in everything we do.",
+  },
+]
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">About INFIQAI</h1>
-            <p className="text-xl text-gray-600 mb-8">
-              We're revolutionizing document security and compliance through advanced AI-powered PII detection and
-              intelligent document analysis.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button size="lg" asChild>
-                <Link href="/contact">Get in Touch</Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/#pricing">View Pricing</Link>
-              </Button>
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-4xl mx-auto">
+              <Badge variant="outline" className="mb-4 bg-white">
+                About INFIQAI
+              </Badge>
+              <h1 className="text-5xl font-bold text-gray-900 mb-6">
+                Empowering Organizations with AI-Driven Compliance
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                We're on a mission to make data privacy and compliance accessible to every organization, regardless of
+                size or technical expertise. Our AI-powered platform helps businesses identify, manage, and protect
+                sensitive information automatically.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/contact">
+                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                    Get in Touch
+                  </Button>
+                </Link>
+                <Link href="/dashboard">
+                  <Button size="lg" variant="outline">
+                    Try Our Platform
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Mission Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
-              <p className="text-lg text-gray-600">
-                To empower organizations with cutting-edge AI technology that ensures data privacy, regulatory
-                compliance, and operational excellence.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+        {/* Mission & Vision */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Protecting Your Most Sensitive Data</h3>
-                <p className="text-gray-600 mb-6">
-                  In today's digital landscape, protecting personally identifiable information (PII) is not just a
-                  regulatory requirement—it's a fundamental responsibility. INFIQAI was founded with the vision of
-                  making advanced data protection accessible to organizations of all sizes.
-                </p>
-                <p className="text-gray-600 mb-6">
-                  Our AI-powered platform automatically detects, classifies, and helps you manage sensitive information
-                  across all your documents, ensuring compliance with GDPR, CCPA, HIPAA, and other privacy regulations.
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span className="text-gray-700">99.9% accuracy in PII detection</span>
+                <div className="mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Target className="h-8 w-8 text-blue-600" />
+                    <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span className="text-gray-700">Enterprise-grade security</span>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    To democratize data privacy and compliance by providing intelligent, automated tools that make it
+                    easy for any organization to protect sensitive information and meet regulatory requirements.
+                  </p>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Globe className="h-8 w-8 text-blue-600" />
+                    <h2 className="text-3xl font-bold text-gray-900">Our Vision</h2>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span className="text-gray-700">Real-time compliance monitoring</span>
-                  </div>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    A world where every organization can confidently handle sensitive data, knowing they have the tools
+                    and knowledge to protect privacy and maintain compliance automatically.
+                  </p>
                 </div>
               </div>
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <div className="grid grid-cols-2 gap-6 text-center">
-                  <div>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">10M+</div>
-                    <div className="text-gray-600">Documents Analyzed</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
-                    <div className="text-gray-600">Enterprise Clients</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">99.9%</div>
-                    <div className="text-gray-600">Uptime SLA</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
-                    <div className="text-gray-600">Support Available</div>
-                  </div>
-                </div>
+              <div className="relative">
+                <img
+                  src="/placeholder.svg?height=400&width=600&text=Mission+Vision"
+                  alt="Mission and Vision"
+                  className="rounded-lg shadow-lg"
+                />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* What We Do Section */}
-      <section className="bg-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+        {/* What We Do */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">What We Do</h2>
-              <p className="text-lg text-gray-600">
-                INFIQAI provides comprehensive AI-powered solutions for document security and compliance
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">What We Do</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                INFIQAI provides comprehensive AI-powered solutions for data privacy, compliance, and document analysis
+                across various industries and use cases.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <Card>
                 <CardHeader>
                   <Shield className="h-12 w-12 text-blue-600 mb-4" />
-                  <CardTitle>PII Detection</CardTitle>
+                  <CardTitle>PII Detection & Classification</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    Advanced AI algorithms automatically identify and classify personally identifiable information
-                    across all document types with industry-leading accuracy.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <Zap className="h-12 w-12 text-blue-600 mb-4" />
-                  <CardTitle>Real-time Analysis</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">
-                    Process documents instantly with our high-performance AI engine, providing immediate insights and
-                    compliance reports for your entire document workflow.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <Users className="h-12 w-12 text-blue-600 mb-4" />
-                  <CardTitle>Team Collaboration</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">
-                    Enable secure collaboration with role-based access controls, audit trails, and team management
-                    features designed for enterprise environments.
+                    Automatically identify and classify personally identifiable information (PII) in documents,
+                    databases, and digital assets using advanced AI algorithms.
                   </p>
                 </CardContent>
               </Card>
@@ -145,91 +182,188 @@ export default function AboutPage() {
               <Card>
                 <CardHeader>
                   <Award className="h-12 w-12 text-blue-600 mb-4" />
-                  <CardTitle>Compliance Reporting</CardTitle>
+                  <CardTitle>Compliance Monitoring</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    Generate comprehensive compliance reports for GDPR, CCPA, HIPAA, and other regulations with detailed
-                    audit trails and remediation recommendations.
+                    Monitor compliance with GDPR, CCPA, HIPAA, and other privacy regulations through continuous scanning
+                    and automated reporting.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <Lightbulb className="h-12 w-12 text-blue-600 mb-4" />
+                  <CardTitle>Risk Assessment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Assess privacy risks and vulnerabilities in your data handling processes with intelligent risk
+                    scoring and remediation recommendations.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <Users className="h-12 w-12 text-blue-600 mb-4" />
+                  <CardTitle>Data Mapping</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Create comprehensive data maps showing where sensitive information flows through your organization
+                    and how it's being processed.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <Zap className="h-12 w-12 text-blue-600 mb-4" />
+                  <CardTitle>Automated Remediation</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Automatically redact, encrypt, or quarantine sensitive data based on your organization's policies
+                    and compliance requirements.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <Globe className="h-12 w-12 text-blue-600 mb-4" />
+                  <CardTitle>Global Compliance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Support for international privacy laws and regulations, helping multinational organizations maintain
+                    compliance across jurisdictions.
                   </p>
                 </CardContent>
               </Card>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Industries Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+        {/* Our Values */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
-              <p className="text-lg text-gray-600">
-                INFIQAI is trusted by organizations across various industries to protect sensitive data
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                These core values guide everything we do and shape how we build products, serve customers, and grow as a
+                company.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-blue-600" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {values.map((value, index) => (
+                <div key={index} className="text-center">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mx-auto mb-4">
+                    <value.icon className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{value.title}</h3>
+                  <p className="text-gray-600">{value.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Healthcare</h3>
-                <p className="text-gray-600">
-                  HIPAA compliance, patient data protection, and medical record security for healthcare providers.
-                </p>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-              <div className="text-center">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Financial Services</h3>
-                <p className="text-gray-600">
-                  Banking regulations, customer data protection, and financial document compliance.
-                </p>
-              </div>
+        {/* Team Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our diverse team of experts brings together decades of experience in AI, privacy, compliance, and
+                enterprise software development.
+              </p>
+            </div>
 
-              <div className="text-center">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-blue-600" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {teamMembers.map((member, index) => (
+                <Card key={index} className="text-center">
+                  <CardContent className="pt-6">
+                    <img
+                      src={member.image || "/placeholder.svg"}
+                      alt={member.name}
+                      className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+                    />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
+                    <p className="text-blue-600 font-medium mb-3">{member.role}</p>
+                    <p className="text-sm text-gray-600">{member.bio}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Company Timeline */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                From a small startup to a growing company serving hundreds of organizations worldwide.
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              <div className="relative">
+                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-blue-200"></div>
+                <div className="space-y-8">
+                  {milestones.map((milestone, index) => (
+                    <div key={index} className="relative flex items-start gap-6">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Badge variant="outline">{milestone.year}</Badge>
+                          <h3 className="text-xl font-semibold text-gray-900">{milestone.title}</h3>
+                        </div>
+                        <p className="text-gray-600">{milestone.description}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Legal & Professional</h3>
-                <p className="text-gray-600">
-                  Attorney-client privilege, confidential documents, and legal compliance management.
-                </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="bg-blue-600 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to Secure Your Documents?</h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Join hundreds of organizations that trust INFIQAI to protect their sensitive data. Start your free trial
-              today and experience the power of AI-driven document security.
+        {/* CTA Section */}
+        <section className="py-20 bg-blue-600">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-4xl font-bold text-white mb-4">Ready to Get Started?</h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+              Join hundreds of organizations that trust INFIQAI to protect their sensitive data and maintain compliance
+              automatically.
             </p>
-            <div className="flex justify-center gap-4">
-              <Button size="lg" variant="secondary" asChild>
-                <Link href="/auth/signup">Start Free Trial</Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-white border-white hover:bg-white hover:text-blue-600 bg-transparent"
-                asChild
-              >
-                <Link href="/contact">Contact Sales</Link>
-              </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/auth/signup">
+                <Button size="lg" variant="secondary">
+                  Start Free Trial
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+                >
+                  Contact Sales
+                </Button>
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
+      <Footer />
     </div>
   )
 }

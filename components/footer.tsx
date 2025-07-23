@@ -6,7 +6,9 @@ export function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">INFIQAI</h3>
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="text-lg font-bold">INFIQAI</span>
+            </Link>
             <p className="text-sm text-muted-foreground">
               AI-powered document analysis and PII detection for modern businesses.
             </p>

@@ -5,8 +5,6 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { signInWithEmailAndPassword, type AuthError } from "firebase/auth"
-import { auth } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,30 +13,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Eye, EyeOff } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-
-function getAuthErrorMessage(error: AuthError): string {
-  switch (error.code) {
-    case "auth/user-not-found":
-      return "No account found with this email address. Please check your email or sign up for a new account."
-    case "auth/wrong-password":
-      return "Incorrect password. Please try again or reset your password."
-    case "auth/invalid-email":
-      return "Please enter a valid email address."
-    case "auth/user-disabled":
-      return "This account has been disabled. Please contact support for assistance."
-    case "auth/too-many-requests":
-      return "Too many failed login attempts. Please try again later or reset your password."
-    case "auth/network-request-failed":
-      return "Network error. Please check your internet connection and try again."
-    case "auth/invalid-credential":
-      return "Invalid email or password. Please check your credentials and try again."
-    case "auth/configuration-not-found":
-      return "Authentication service is not properly configured. Please contact support."
-    default:
-      console.error("Unhandled auth error:", error.code, error.message)
-      return "An error occurred during login. Please try again or contact support if the problem persists."
-  }
-}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -66,25 +40,49 @@ export default function LoginPage() {
       return
     }
 
-    if (!auth) {
-      setError("Authentication service is not available. Please try again later.")
-      setLoading(false)
-      return
-    }
-
+    // Demo authentication - simulate API call
     try {
-      console.log("Attempting to sign in with:", email)
-      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password)
-      console.log("Sign in successful:", userCredential.user.uid)
-      router.push("/dashboard")
+      // Simulate authentication delay
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      // Demo credentials check
+      if (email.toLowerCase() === "demo@infiqai.com" && password === "demo123456") {
+        console.log("Demo login successful")
+        // Store demo user info in localStorage for demo purposes
+        localStorage.setItem(
+          "infiqai_user",
+          JSON.stringify({
+            email: "demo@infiqai.com",
+            name: "Demo User",
+            role: "user",
+            uid: "demo-user-123",
+          }),
+        )
+        router.push("/dashboard")
+        return
+      }
+
+      if (email.toLowerCase() === "admin@infiqai.com" && password === "admin123456") {
+        console.log("Admin login successful")
+        // Store admin user info in localStorage for demo purposes
+        localStorage.setItem(
+          "infiqai_user",
+          JSON.stringify({
+            email: "admin@infiqai.com",
+            name: "Admin User",
+            role: "admin",
+            uid: "admin-user-123",
+          }),
+        )
+        router.push("/dashboard/admin")
+        return
+      }
+
+      // For any other credentials, show error
+      setError("Invalid email or password. Use demo@infiqai.com / demo123456 or admin@infiqai.com / admin123456")
     } catch (error: any) {
       console.error("Login error:", error)
-
-      if (error && typeof error === "object" && "code" in error) {
-        setError(getAuthErrorMessage(error as AuthError))
-      } else {
-        setError("An unexpected error occurred. Please try again.")
-      }
+      setError("An unexpected error occurred. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -94,7 +92,13 @@ export default function LoginPage() {
   const handleDemoLogin = () => {
     setEmail("demo@infiqai.com")
     setPassword("demo123456")
-    setError("Demo credentials loaded. Click 'Sign In' to continue with demo account.")
+    setError("")
+  }
+
+  const handleAdminLogin = () => {
+    setEmail("admin@infiqai.com")
+    setPassword("admin123456")
+    setError("")
   }
 
   return (
@@ -111,7 +115,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               {error && (
-                <Alert variant={error.includes("Demo credentials") ? "default" : "destructive"}>
+                <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
@@ -157,15 +161,31 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full bg-transparent"
-                onClick={handleDemoLogin}
-                disabled={loading}
-              >
-                Load Demo Credentials
-              </Button>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <p className="text-sm text-blue-800 mb-3 font-medium">Demo Credentials:</p>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 bg-white"
+                    onClick={handleDemoLogin}
+                    disabled={loading}
+                  >
+                    Demo User
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 bg-white"
+                    onClick={handleAdminLogin}
+                    disabled={loading}
+                  >
+                    Admin User
+                  </Button>
+                </div>
+              </div>
             </CardContent>
 
             <CardFooter className="flex flex-col space-y-4">

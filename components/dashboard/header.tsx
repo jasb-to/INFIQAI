@@ -1,10 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { signOut } from "firebase/auth"
-import { Bell, Menu, Search, User, AlertCircle, CheckCircle } from "lucide-react"
+import { Bell, Menu, Search, User, AlertCircle, CheckCircle, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,17 +14,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { auth } from "@/lib/firebase"
 import { ModeToggle } from "@/components/mode-toggle"
+import { Badge } from "@/components/ui/badge"
 
 export function DashboardHeader() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [user, setUser] = useState<any>(null)
   const router = useRouter()
-  const user = auth.currentUser
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("infiqai_user")
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
+  }, [])
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth)
+      localStorage.removeItem("infiqai_user")
       router.push("/")
     } catch (error) {
       console.error("Error signing out:", error)
@@ -40,8 +46,17 @@ export function DashboardHeader() {
           <span className="sr-only">Toggle menu</span>
         </Button>
         <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+            <span className="text-sm font-bold">IQ</span>
+          </div>
           <span className="text-xl font-bold">INFIQAI</span>
         </Link>
+        {user?.role === "admin" && (
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Shield className="h-3 w-3 mr-1" />
+            Admin
+          </Badge>
+        )}
       </div>
       <div className="hidden md:flex md:w-1/3 lg:w-1/4">
         <div className="relative w-full">
@@ -118,20 +133,40 @@ export function DashboardHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>
-              {user?.displayName || "User"}
+              {user?.name || "User"}
               <p className="text-xs font-normal text-muted-foreground">{user?.email}</p>
+              {user?.role === "admin" && (
+                <Badge variant="outline" className="mt-1 bg-blue-50 text-blue-700 border-blue-200">
+                  <Shield className="h-3 w-3 mr-1" />
+                  Administrator
+                </Badge>
+              )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/profile">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/settings">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/billing">Billing</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {user?.role === "admin" ? (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/admin">Admin Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard">User Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/settings">Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/billing">Billing</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuItem onClick={handleSignOut}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
