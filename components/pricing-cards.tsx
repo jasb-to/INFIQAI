@@ -38,13 +38,13 @@ const plans = [
     description: "Perfect for growing businesses",
     features: [
       "200 document scans per month",
-      "Advanced PII detection + compliance reports",
+      "Advanced PII detection + compliance",
       "Priority support + phone support",
       "Fastest processing speed",
       "Advanced export options",
-      "Detailed analytics dashboard",
+      "Detailed analytics & insights",
       "API access",
-      "Custom integrations",
+      "Custom compliance rules",
     ],
     buttonText: "Start Free Trial",
     popular: true,
@@ -57,14 +57,13 @@ const plans = [
     features: [
       "Unlimited document scans",
       "Enterprise-grade PII detection",
-      "24/7 dedicated support",
-      "Ultra-fast processing",
-      "White-label solutions",
-      "Advanced analytics + reporting",
-      "Full API access",
+      "Dedicated account manager",
       "Custom integrations",
-      "SLA guarantee",
+      "Advanced API access",
+      "Custom compliance frameworks",
+      "SSO integration",
       "On-premise deployment options",
+      "SLA guarantee",
     ],
     buttonText: "Contact Sales",
     popular: false,
@@ -74,33 +73,34 @@ const plans = [
 export function PricingCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-      {plans.map((plan) => (
-        <Card key={plan.name} className={`relative ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}>
+      {plans.map((plan, index) => (
+        <Card key={index} className={`relative ${plan.popular ? "border-blue-500 shadow-lg scale-105" : ""}`}>
           {plan.popular && (
-            <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
-              Most Popular
-            </Badge>
+            <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-blue-500">Most Popular</Badge>
           )}
           <CardHeader className="text-center">
-            <CardTitle className="text-xl">{plan.name}</CardTitle>
+            <CardTitle className="text-2xl">{plan.name}</CardTitle>
             <div className="mt-4">
               <span className="text-4xl font-bold">{plan.price}</span>
-              <span className="text-muted-foreground ml-1">/{plan.period}</span>
+              <span className="text-gray-600 ml-1">/{plan.period}</span>
             </div>
             <CardDescription className="mt-2">{plan.description}</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-3">
-              {plan.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              {plan.features.map((feature, featureIndex) => (
+                <li key={featureIndex} className="flex items-center">
+                  <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
                   <span className="text-sm">{feature}</span>
                 </li>
               ))}
             </ul>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
+            <Button
+              className={`w-full ${plan.popular ? "bg-blue-500 hover:bg-blue-600" : ""}`}
+              variant={plan.popular ? "default" : "outline"}
+            >
               {plan.buttonText}
             </Button>
           </CardFooter>

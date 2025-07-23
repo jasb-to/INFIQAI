@@ -2,121 +2,61 @@
 
 import { useEffect, useState } from "react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { CheckCircle, AlertCircle, XCircle } from "lucide-react"
-
-interface FirebaseStatus {
-  initialized: boolean
-  auth: boolean
-  firestore: boolean
-  storage: boolean
-  error?: string
-}
+import { AlertTriangle } from "lucide-react"
+import { isFirebaseInitialized, getFirebaseInitializationError } from "@/lib/firebase"
 
 export function FirebaseStatus() {
-  const [status, setStatus] = useState<FirebaseStatus>({
-    initialized: false,
-    auth: false,
-    firestore: false,
-    storage: false,
-  })
+  const [initialized, setInitialized] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const checkFirebaseStatus = async () => {
-      try {
-        // Only check in browser environment
-        if (typeof window === "undefined") return
+    setMounted(true)
 
-        // Try to import Firebase modules
-        const { auth, db, storage, isFirebaseInitialized } = await import("@/lib/firebase")
+    // Check Firebase initialization status
+    const checkFirebase = () => {
+      const isInit = isFirebaseInitialized()
+      const initError = getFirebaseInitializationError()
 
-        const initialized = isFirebaseInitialized()
-
-        setStatus({
-          initialized,
-          auth: !!auth,
-          firestore: !!db,
-          storage: !!storage,
-        })
-      } catch (error: any) {
-        console.error("Firebase status check error:", error)
-        setStatus({
-          initialized: false,
-          auth: false,
-          firestore: false,
-          storage: false,
-          error: error.message,
-        })
-      }
+      setInitialized(isInit)
+      setError(initError)
     }
 
-    checkFirebaseStatus()
+    checkFirebase()
+
+    // Recheck after a short delay to catch any async initialization
+    const timer = setTimeout(checkFirebase, 1000)
+
+    return () => clearTimeout(timer)
   }, [])
 
-  if (status.error) {
-    return (
-      <Alert variant="destructive">
-        <XCircle className="h-4 w-4" />
-        <AlertDescription>
-          <strong>Firebase Configuration Error:</strong>
-          <br />
-          {status.error}
-          <br />
-          <br />
-          Please check your environment variables:
-          <ul className="list-disc list-inside mt-2 text-xs">
-            <li>NEXT_PUBLIC_FIREBASE_API</li>
-            <li>NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN</li>
-            <li>NEXT_PUBLIC_FIREBASE_PROJECT_ID</li>
-            <li>NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET</li>
-            <li>NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID</li>
-            <li>NEXT_PUBLIC_FIREBASE_APP_ID</li>
-          </ul>
-        </AlertDescription>
-      </Alert>
-    )
+  // Don't render anything during SSR
+  if (!mounted) {
+    return null
   }
 
-  const allServicesReady = status.initialized && status.auth && status.firestore && status.storage
+  // Don't show anything if Firebase is properly initialized
+  if (initialized && !error) {
+    return null
+  }
 
   return (
-    <Alert variant={allServicesReady ? "default" : "destructive"}>
-      {allServicesReady ? <CheckCircle className="h-4 w-4 text-green-600" /> : <AlertCircle className="h-4 w-4" />}
+    <Alert variant="destructive" className="mb-4">
+      <AlertTriangle className="h-4 w-4" />
       <AlertDescription>
-        <strong>Firebase Services Status:</strong>
-        <ul className="mt-2 space-y-1">
-          <li className="flex items-center gap-2">
-            {status.initialized ? (
-              <CheckCircle className="h-3 w-3 text-green-600" />
-            ) : (
-              <XCircle className="h-3 w-3 text-red-600" />
-            )}
-            Firebase App: {status.initialized ? "Initialized" : "Not initialized"}
-          </li>
-          <li className="flex items-center gap-2">
-            {status.auth ? (
-              <CheckCircle className="h-3 w-3 text-green-600" />
-            ) : (
-              <XCircle className="h-3 w-3 text-red-600" />
-            )}
-            Authentication: {status.auth ? "Ready" : "Not configured"}
-          </li>
-          <li className="flex items-center gap-2">
-            {status.firestore ? (
-              <CheckCircle className="h-3 w-3 text-green-600" />
-            ) : (
-              <XCircle className="h-3 w-3 text-red-600" />
-            )}
-            Firestore: {status.firestore ? "Ready" : "Not configured"}
-          </li>
-          <li className="flex items-center gap-2">
-            {status.storage ? (
-              <CheckCircle className="h-3 w-3 text-green-600" />
-            ) : (
-              <XCircle className="h-3 w-3 text-red-600" />
-            )}
-            Storage: {status.storage ? "Ready" : "Not configured"}
-          </li>
-        </ul>
+        <strong>Firebase Configuration Error:</strong>
+        <br />
+        {error || "Firebase failed to initialize properly."}
+        <br />
+        <small className="text-xs mt-2 block">
+          Please check your environment variables:
+          <br />• NEXT_PUBLIC_FIREBASE_API
+          <br />• NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+          <br />• NEXT_PUBLIC_FIREBASE_PROJECT_ID
+          <br />• NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+          <br />• NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+          <br />• NEXT_PUBLIC_FIREBASE_APP_ID
+        </small>
       </AlertDescription>
     </Alert>
   )
