@@ -64,7 +64,7 @@ export function FirebaseStatus() {
           <br />
           Please check your environment variables:
           <ul className="list-disc list-inside mt-2 text-xs">
-            <li>NEXT_PUBLIC_FIREBASE_API_KEY</li>
+            <li>NEXT_PUBLIC_FIREBASE_API</li>
             <li>NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN</li>
             <li>NEXT_PUBLIC_FIREBASE_PROJECT_ID</li>
             <li>NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET</li>
