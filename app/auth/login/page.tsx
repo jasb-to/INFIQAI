@@ -3,16 +3,37 @@
 import type React from "react"
 
 import { useState } from "react"
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { auth } from "@/lib/firebase"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { signInWithEmailAndPassword, type AuthError } from "firebase/auth"
+import { auth } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { FirebaseStatus } from "@/components/firebase-status"
+import { Loader2 } from "lucide-react"
+
+function getAuthErrorMessage(error: AuthError): string {
+  switch (error.code) {
+    case "auth/user-not-found":
+      return "No account found with this email address. Please check your email or sign up for a new account."
+    case "auth/wrong-password":
+      return "Incorrect password. Please try again or reset your password."
+    case "auth/invalid-email":
+      return "Please enter a valid email address."
+    case "auth/user-disabled":
+      return "This account has been disabled. Please contact support for assistance."
+    case "auth/too-many-requests":
+      return "Too many failed login attempts. Please try again later or reset your password."
+    case "auth/network-request-failed":
+      return "Network error. Please check your internet connection and try again."
+    case "auth/invalid-credential":
+      return "Invalid email or password. Please check your credentials and try again."
+    default:
+      return "An error occurred during login. Please try again."
+  }
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -21,43 +42,20 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
     try {
-      if (!auth) {
-        throw new Error("Firebase auth not initialized")
-      }
-
       await signInWithEmailAndPassword(auth, email, password)
       router.push("/dashboard")
-    } catch (error: any) {
+    } catch (error) {
       console.error("Login error:", error)
-
-      // Handle specific Firebase auth errors
-      switch (error.code) {
-        case "auth/invalid-credential":
-          setError("Invalid email or password. Please check your credentials and try again.")
-          break
-        case "auth/user-not-found":
-          setError("No account found with this email address.")
-          break
-        case "auth/wrong-password":
-          setError("Incorrect password. Please try again.")
-          break
-        case "auth/invalid-email":
-          setError("Please enter a valid email address.")
-          break
-        case "auth/user-disabled":
-          setError("This account has been disabled. Please contact support.")
-          break
-        case "auth/too-many-requests":
-          setError("Too many failed login attempts. Please try again later.")
-          break
-        default:
-          setError("Login failed. Please try again or contact support if the problem persists.")
+      if (error && typeof error === "object" && "code" in error) {
+        setError(getAuthErrorMessage(error as AuthError))
+      } else {
+        setError("An unexpected error occurred. Please try again.")
       }
     } finally {
       setLoading(false)
@@ -65,67 +63,71 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">INFIQAI</h1>
-          <p className="mt-2 text-gray-600">Sign in to your account</p>
-        </div>
-
-        <FirebaseStatus />
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Welcome back</CardTitle>
-            <CardDescription>Enter your credentials to access your dashboard</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div>
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Enter your password"
-                />
-              </div>
-
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
-              </Button>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link href="/auth/signup" className="text-blue-600 hover:text-blue-500">
-                  Sign up
-                </Link>
-              </p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center">Sign in to INFIQAI</CardTitle>
+          <CardDescription className="text-center">
+            Enter your email and password to access your account
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={loading}
+              />
             </div>
           </CardContent>
-        </Card>
-      </div>
+          <CardFooter className="flex flex-col space-y-4">
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </Button>
+            <div className="text-center text-sm">
+              <span className="text-muted-foreground">Don't have an account? </span>
+              <Link href="/auth/signup" className="text-primary hover:underline">
+                Sign up
+              </Link>
+            </div>
+            <div className="text-center">
+              <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
+                Forgot your password?
+              </Link>
+            </div>
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   )
 }

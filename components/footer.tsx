@@ -2,29 +2,44 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background">
-      <div className="container py-8 md:py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="font-bold text-xl">INFIQAI</span>
-            </Link>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Advanced AI-powered PII detection and document analysis for businesses of all sizes.
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">INFIQAI</h3>
+            <p className="text-sm text-muted-foreground">
+              AI-powered document analysis and PII detection for modern businesses.
             </p>
           </div>
-          <div>
-            <h3 className="font-semibold">Product</h3>
-            <ul className="mt-4 space-y-2 text-sm">
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold">Product</h4>
+            <ul className="space-y-2 text-sm">
               <li>
-                <a href="/#features" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#features" className="text-muted-foreground hover:text-foreground">
                   Features
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/#pricing" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#pricing" className="text-muted-foreground hover:text-foreground">
                   Pricing
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="text-muted-foreground hover:text-foreground">
+                  Dashboard
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold">Company</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/about" className="text-muted-foreground hover:text-foreground">
+                  About
+                </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-foreground">
@@ -33,14 +48,10 @@ export function Footer() {
               </li>
             </ul>
           </div>
-          <div>
-            <h3 className="font-semibold">Company</h3>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground">
-                  About
-                </Link>
-              </li>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold">Legal</h4>
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
                   Privacy Policy
@@ -53,19 +64,10 @@ export function Footer() {
               </li>
             </ul>
           </div>
-          <div>
-            <h3 className="font-semibold">Support</h3>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground">
-                  Contact Support
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
-        <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 INFIQAI. All rights reserved.</p>
+
+        <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
+          <p>&copy; 2024 INFIQAI Limited. All rights reserved.</p>
         </div>
       </div>
     </footer>
