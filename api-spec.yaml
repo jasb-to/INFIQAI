@@ -1,0 +1,428 @@
+openapi: 3.0.3
+info:
+  title: INFIQAI Labeling Platform API
+  description: Privacy-first automated data labeling with Hugging Face integration
+  version: 1.0.0
+  contact:
+    name: INFIQAI Support
+    email: support@infiqai.com
+
+servers:
+  - url: https://api.infiqai.com/v1
+    description: Production server
+  - url: https://staging-api.infiqai.com/v1
+    description: Staging server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /datasets:
+    get:
+      summary: List all datasets
+      tags: [Datasets]
+      responses:
+        '200':
+          description: List of datasets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datasets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Dataset'
+    
+    post:
+      summary: Create a new dataset
+      tags: [Datasets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, taskType, customerId]
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                taskType:
+                  type: string
+                  enum: [NER, classification, multi-label, contract-tagging]
+                customerId:
+                  type: string
+                confidenceThresholds:
+                  $ref: '#/components/schemas/ConfidenceThresholds'
+      responses:
+        '201':
+          description: Dataset created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataset:
+                    $ref: '#/components/schemas/Dataset'
+
+  /datasets/{id}/upload:
+    post:
+      summary: Upload data to dataset
+      tags: [Datasets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                encryption:
+                  type: boolean
+                  default: true
+      responses:
+        '200':
+          description: Upload successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uploadId:
+                    type: string
+                  itemCount:
+                    type: integer
+
+  /datasets/{id}/inference:
+    post:
+      summary: Run model inference on dataset
+      tags: [Inference]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [items, modelConfig, userId]
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      content:
+                        type: string
+                modelConfig:
+                  $ref: '#/components/schemas/ModelConfig'
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Inference completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LabelingTask'
+
+  /tasks/{id}/review:
+    post:
+      summary: Submit human review for a task
+      tags: [Review]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [review, userId]
+              properties:
+                review:
+                  $ref: '#/components/schemas/HumanReview'
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Review submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  review:
+                    $ref: '#/components/schemas/HumanReview'
+
+  /datasets/{id}/export:
+    post:
+      summary: Export labeled dataset
+      tags: [Export]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [format, userId]
+              properties:
+                format:
+                  type: string
+                  enum: [jsonl, csv, huggingface, spacy]
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Export file
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /audit/logs:
+    get:
+      summary: Get audit logs
+      tags: [Audit]
+      parameters:
+        - name: datasetId
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Audit logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AuditLog'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        taskType:
+          type: string
+          enum: [NER, classification, multi-label, contract-tagging]
+        status:
+          type: string
+          enum: [uploading, processing, ready, completed]
+        totalItems:
+          type: integer
+        labeledItems:
+          type: integer
+        autoAcceptedItems:
+          type: integer
+        humanReviewItems:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        customerId:
+          type: string
+        confidenceThresholds:
+          $ref: '#/components/schemas/ConfidenceThresholds'
+
+    ConfidenceThresholds:
+      type: object
+      properties:
+        autoAccept:
+          type: number
+          minimum: 0
+          maximum: 1
+        quickReview:
+          type: number
+          minimum: 0
+          maximum: 1
+        fullHuman:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    LabelingTask:
+      type: object
+      properties:
+        id:
+          type: string
+        datasetId:
+          type: string
+        itemId:
+          type: string
+        content:
+          type: string
+        taskType:
+          type: string
+        modelPrediction:
+          $ref: '#/components/schemas/ModelPrediction'
+        humanReview:
+          $ref: '#/components/schemas/HumanReview'
+        status:
+          type: string
+          enum: [pending, auto_accepted, needs_review, reviewed, completed]
+        confidence:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ModelPrediction:
+      type: object
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+        modelVersion:
+          type: string
+        inferenceTime:
+          type: number
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+
+    Entity:
+      type: object
+      properties:
+        text:
+          type: string
+        label:
+          type: string
+        start:
+          type: integer
+        end:
+          type: integer
+        confidence:
+          type: number
+
+    HumanReview:
+      type: object
+      properties:
+        reviewerId:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+        timeSpent:
+          type: number
+        confidence:
+          type: number
+        notes:
+          type: string
+        reviewedAt:
+          type: string
+          format: date-time
+
+    ModelConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        huggingFaceModel:
+          type: string
+        taskType:
+          type: string
+        isPrivate:
+          type: boolean
+        endpoint:
+          type: string
+        version:
+          type: string
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+        action:
+          type: string
+        actor:
+          type: string
+        datasetId:
+          type: string
+        taskId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+        checksum:
+          type: string

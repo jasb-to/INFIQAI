@@ -1,0 +1,38 @@
+Component,Unit,Unit Cost (£),Volume,Total Cost (£),Notes
+Model Inference,Per item,0.02,5000,100,Hugging Face private inference
+Human Review,Per hour,25,40,1000,Estimated 40 hours for 1000 items needing review
+Platform Infrastructure,Per month,500,0.5,250,2-week pilot period
+Data Storage,Per GB,0.10,50,5,Encrypted storage for dataset and results
+Audit Logging,Per month,100,0.5,50,Compliance and audit trail storage
+Technical Support,Per hour,75,20,1500,Dedicated support during pilot
+Model Fine-tuning,One-time,1000,1,1000,Custom model training if needed
+Security & Compliance,One-time,500,1,500,DPA setup and compliance validation
+Export & Delivery,One-time,200,1,200,Multiple format exports and documentation
+Project Management,Per hour,50,20,1000,Pilot coordination and reporting
+
+Subtotal,,,,,5605
+Contingency (10%),,,,,561
+Total Pilot Cost,,,,,6166
+
+Post-Pilot Monthly Costs (10k items/month):
+Model Inference,Per item,0.02,10000,200,
+Human Review,Per hour,25,80,2000,Assuming 20% review rate
+Platform Infrastructure,Per month,800,1,800,
+Data Storage,Per GB,0.10,100,10,
+Audit Logging,Per month,100,1,100,
+Support (Standard),Per month,200,1,200,
+
+Monthly Total (10k items),,,,,3310
+Annual Total (10k items/month),,,,,39720
+
+Scaling Factors:
+- 1k items/month: £500 base + £0.15/item = £650/month
+- 10k items/month: £800 base + £0.10/item = £1800/month  
+- 100k items/month: £1500 base + £0.05/item = £6500/month
+
+Notes:
+- Prices in GBP excluding VAT
+- Human review rate varies by task complexity (10-30%)
+- Volume discounts available for annual contracts
+- On-premise deployment adds 50% infrastructure cost
+- Custom model development quoted separately
